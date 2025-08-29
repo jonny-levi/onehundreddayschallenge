@@ -17,3 +17,9 @@ variable "public_subnets" {
   type        = list(string)
   description = "Public subnets for load balancers, etc."
 }
+
+variable "user_data" {
+  type        = string
+  description = "User data script to configure EC2 instance"
+  default     = null
+}

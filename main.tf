@@ -9,6 +9,14 @@ module "ec2_creation" {
   private_subnets = module.vpc_creation.private_subnet_ids
   public_subnets  = module.vpc_creation.public_subnet_ids
   vpc_id          = module.vpc_creation.vpc_id
+  user_data       = <<-EOT
+    #!/bin/bash
+    yum update -y
+    yum install -y stress -y
+    # Run stress for 5 minutes with 2 CPU workers
+    stress --cpu 2 --timeout 300
+  EOT
+
 }
 
 module "s3" {
@@ -17,6 +25,8 @@ module "s3" {
 }
 
 module "cloudwatch" {
-  source = "./modules/cloudwatch"
+  source          = "./modules/cloudwatch"
+  region          = var.region
+  ec2_instance_id = module.ec2_creation.ec2_instance_id
 }
 
