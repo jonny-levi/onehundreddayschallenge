@@ -17,7 +17,7 @@ module "ec2_creation" {
     stress --cpu 2 --timeout 1200
   EOT
   ec2_count       = 3
-
+  depends_on      = [module.vpc_creation]
 }
 
 module "s3" {
@@ -29,5 +29,5 @@ module "cloudwatch" {
   source          = "./modules/cloudwatch"
   region          = var.region
   ec2_instance_id = module.ec2_creation.ec2_instance_id
+  depends_on      = [module.ec2_creation]
 }
-
