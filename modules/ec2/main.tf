@@ -14,6 +14,7 @@ data "aws_ami" "example" {
 resource "aws_instance" "example" {
   ami       = data.aws_ami.example.id
   user_data = var.user_data
+  count     = var.ec2_count
   # subnet_id   = var
   instance_market_options {
     market_type = "spot"

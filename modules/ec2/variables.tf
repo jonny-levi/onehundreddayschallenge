@@ -23,3 +23,7 @@ variable "user_data" {
   description = "User data script to configure EC2 instance"
   default     = null
 }
+variable "ec2_count" {
+  type        = number
+  description = "The number of EC2 instances"
+}

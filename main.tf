@@ -14,8 +14,9 @@ module "ec2_creation" {
     yum update -y
     yum install -y stress -y
     # Run stress for 5 minutes with 2 CPU workers
-    stress --cpu 2 --timeout 300
+    stress --cpu 2 --timeout 1200
   EOT
+  ec2_count       = 3
 
 }
 

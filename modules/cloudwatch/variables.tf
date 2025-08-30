@@ -4,5 +4,5 @@ variable "region" {
 
 }
 variable "ec2_instance_id" {
-  type = string
+  type = list(string)
 }
