@@ -1,9 +1,9 @@
 output "aws_vpc" {
-  value = module.vpc_creation
+  value = module.vpc_creation.vpc_id
 }
 
 output "ec2_instance_id" {
-  value = module.ec2_creation.ec2_instance_id
+  value = module.ec2_creation.ec2_instance_id[*]
 }
 
 output "aws_s3_bucket" {
@@ -11,6 +11,6 @@ output "aws_s3_bucket" {
 }
 
 output "cloudwatch" {
-  value = module.cloudwatch
+  value = module.cloudwatch.aws_cloudwatch_dashboard
 }
 

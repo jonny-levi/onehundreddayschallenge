@@ -12,7 +12,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         height = 6
         properties = {
           metrics = [
-            ["AWS/EC2", "CPUUtilization", "InstanceId", var.ec2_instance_id]
+            for id in var.ec2_instance_id : ["AWS/EC2", "CPUUtilization", "InstanceId", id]
           ]
           period = 60
           stat   = "Average"
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         height = 6
         properties = {
           metrics = [
-            ["AWS/EC2", "NetworkIn", "InstanceId", var.ec2_instance_id]
+            for id in var.ec2_instance_id : ["AWS/EC2", "NetworkIn", "InstanceId", id]
           ]
           period = 60
           stat   = "Average"
@@ -67,7 +67,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         height = 6
         properties = {
           metrics = [
-            ["AWS/EC2", "NetworkOut", "InstanceId", var.ec2_instance_id]
+            for id in var.ec2_instance_id : ["AWS/EC2", "NetworkOut", "InstanceId", id]
           ]
           period = 60
           stat   = "Average"
@@ -100,4 +100,9 @@ resource "aws_cloudwatch_log_group" "cwlg" {
     Environment = "production"
     Application = "serviceA"
   }
+}
+
+resource "aws_cloudwatch_log_stream" "foo" {
+  name           = "SampleLogStream1234"
+  log_group_name = aws_cloudwatch_log_group.cwlg.name
 }

@@ -24,6 +24,6 @@ resource "aws_instance" "example" {
   }
   instance_type = "t4g.nano"
   tags = {
-    Name = "test-spot"
+    Name = "test-spot-${count.index + 1}"
   }
 }
