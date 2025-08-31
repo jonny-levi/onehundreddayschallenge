@@ -31,3 +31,9 @@ module "cloudwatch" {
   ec2_instance_id = module.ec2_creation.ec2_instance_id
   depends_on      = [module.ec2_creation]
 }
+
+module "ecs" {
+  source                      = "./modules/ecs"
+  task_definition_family_name = "telegram-bot-service"
+  ecs_image                   = "NEED TO CHANGE TO THE IMAGE IN THE REGISTRY"
+}
