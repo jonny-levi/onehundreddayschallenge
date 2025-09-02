@@ -23,77 +23,61 @@ resource "aws_iam_role" "test_role" {
 }
 
 resource "aws_ecs_cluster" "tg-bot-cluster" {
-  name = "tg-bot-cluster"
+  name = var.ecs_cluster_name
 
   setting {
-    name  = var.ecs_cluster_name
+    name  = "containerInsights"
     value = "enabled"
+  }
+}
 
+resource "aws_ecs_cluster_capacity_providers" "example" {
+  cluster_name = aws_ecs_cluster.tg-bot-cluster.name
+
+  capacity_providers = ["FARGATE"]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "FARGATE"
   }
 }
 
 resource "aws_ecs_task_definition" "service" {
-  family = var.task_definition_family_name
+  family                   = var.task_definition_family_name
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 1024
+  memory                   = 2048
   container_definitions = jsonencode([
     {
-      name      = "first"
+      name      = var.ecs_container_name
       image     = var.ecs_image
       cpu       = 1024
       memory    = 2048
       essential = true
+      command   = ["sleep", "infinity"]
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
-        }
-      ]
-    },
-    {
-      name      = "second"
-      image     = "service-second"
-      cpu       = 10
-      memory    = 256
-      essential = true
-      portMappings = [
-        {
-          containerPort = 443
-          hostPort      = 443
+          containerPort = var.ecs_containerport
+          hostPort      = var.ecs_hostport
         }
       ]
     }
   ])
-
-  volume {
-    name      = "service-storage"
-    host_path = "/ecs/service-storage"
-  }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
-  }
 }
 resource "aws_ecs_service" "tg-bot-svc" {
   name            = var.ecs_sevice_name
   cluster         = aws_ecs_cluster.tg-bot-cluster.id
-  task_definition = aws_ecs_task_definition.mongo.arn
+  task_definition = aws_ecs_task_definition.service.arn
   desired_count   = 3
-  iam_role        = aws_iam_role.foo.arn
-  depends_on      = [aws_iam_role_policy.foo]
 
-  ordered_placement_strategy {
-    type  = "binpack"
-    field = "cpu"
-  }
+  launch_type = "FARGATE"
 
-  #   load_balancer {
-  #     target_group_arn = aws_lb_target_group.foo.arn
-  #     container_name   = "mongo"
-  #     container_port   = 8080
-  #   }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-east-1a]"
+  network_configuration {
+    subnets          = var.vpc_public_subnet_cidrs # make sure these are subnet IDs, not CIDRs
+    assign_public_ip = true                        # useful if no NAT in VPC
+    # security_groups  = [aws_security_group.ecs.id] # define SG in your module
   }
 }
+
