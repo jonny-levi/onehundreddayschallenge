@@ -3,3 +3,33 @@ variable "region" {
   description = "The region where all resources will be created"
   default     = "us-east-1"
 }
+
+variable "vpc_module_creation" {
+  type        = bool
+  default     = true
+  description = "True or False for module creation"
+}
+
+variable "ec2_module_creation" {
+  type        = bool
+  default     = false
+  description = "True or False for module creation"
+}
+
+variable "s3_module_creation" {
+  type        = bool
+  default     = false
+  description = "True or False for module creation"
+}
+
+variable "cloudwatch_module_creation" {
+  type        = bool
+  default     = false
+  description = "True or False for module creation"
+}
+
+variable "ecs_module_creation" {
+  type        = bool
+  default     = false
+  description = "True or False for module creation"
+}

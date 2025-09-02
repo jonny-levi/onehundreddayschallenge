@@ -10,7 +10,7 @@ variable "vpc_id" {
 
 variable "private_subnets" {
   type        = list(string)
-  description = "Private subnets for EKS"
+  description = "Private subnets"
 }
 
 variable "public_subnets" {
