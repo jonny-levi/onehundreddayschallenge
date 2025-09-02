@@ -35,5 +35,7 @@ module "cloudwatch" {
 module "ecs" {
   source                      = "./modules/ecs"
   task_definition_family_name = "telegram-bot-service"
-  ecs_image                   = "NEED TO CHANGE TO THE IMAGE IN THE REGISTRY"
+  ecs_image                   = "docker.io/library/ubuntu:latest"
+  ecs_cluster_name            = "tg-bot-cluster"
+  ecs_sevice_name             = "TGBotSVC"
 }

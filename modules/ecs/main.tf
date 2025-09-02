@@ -22,18 +22,15 @@ resource "aws_iam_role" "test_role" {
   }
 }
 
-
-
 resource "aws_ecs_cluster" "tg-bot-cluster" {
   name = "tg-bot-cluster"
 
   setting {
-    name  = "tg-bot-cluster"
+    name  = var.ecs_cluster_name
     value = "enabled"
 
   }
 }
-
 
 resource "aws_ecs_task_definition" "service" {
   family = var.task_definition_family_name
@@ -77,7 +74,7 @@ resource "aws_ecs_task_definition" "service" {
   }
 }
 resource "aws_ecs_service" "tg-bot-svc" {
-  name            = "TGBotSVC"
+  name            = var.ecs_sevice_name
   cluster         = aws_ecs_cluster.tg-bot-cluster.id
   task_definition = aws_ecs_task_definition.mongo.arn
   desired_count   = 3
