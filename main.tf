@@ -36,6 +36,11 @@ module "cloudwatch" {
   depends_on      = [module.ec2_creation]
 }
 
+module "codepipeline" {
+  source              = "./modules/codepipeline"
+  codepipeline-region = var.region
+}
+
 module "ecr_creation" {
   source     = "./modules/ecr"
   ecr_name   = "ecr-jonathan-test1002101223"
