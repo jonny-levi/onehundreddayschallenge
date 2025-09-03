@@ -37,6 +37,11 @@ module "cloudwatch" {
   depends_on      = [module.ec2_creation]
 }
 
+module "ecr_creation" {
+  source     = "./modules/ecr"
+  ecr_name   = "ecr-jonathan-test1002101223"
+  ecr_region = var.region
+}
 
 module "ecs" {
   # count                       = var.ecs_module_creation ? 1 : 0
