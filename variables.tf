@@ -4,6 +4,15 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "default_tags" {
+  type = map(string)
+  default = {
+    Project     = "TelegramBot"
+    Environment = "dev"
+    Owner       = "Jonathan"
+  }
+}
+
 variable "vpc_module_creation" {
   type        = bool
   default     = true
