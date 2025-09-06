@@ -1,7 +1,7 @@
 name: Infra Deployment
 
 on:
-  workflow_dispatch:  # manual trigger for now
+  workflow_dispatch: # manual trigger for now
   push:
     branches:
       - main
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.8.5
+          terraform_version: 1.12.2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
