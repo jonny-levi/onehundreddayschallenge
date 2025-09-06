@@ -34,7 +34,7 @@ jobs:
 
       - name: Get ECR repo URL
         id: tf-output
-        run: echo "ecr_url=$(terraform output -raw ecr_repo_url)" >> $GITHUB_OUTPUT
+        run: echo "ecr_url=$(terraform output -raw ecr_repository_url)" >> $GITHUB_OUTPUT
 
       - name: Show ECR repo URL
         run: echo "ECR repo created at ${{ steps.tf-output.outputs.ecr_url }}"
