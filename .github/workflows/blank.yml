@@ -1,0 +1,40 @@
+name: Infra Deployment
+
+on:
+  workflow_dispatch:  # manual trigger for now
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+      - name: Get ECR repo URL
+        id: tf-output
+        run: echo "ecr_url=$(terraform output -raw ecr_repo_url)" >> $GITHUB_OUTPUT
+
+      - name: Show ECR repo URL
+        run: echo "ECR repo created at ${{ steps.tf-output.outputs.ecr_url }}"
