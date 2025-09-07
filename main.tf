@@ -3,6 +3,7 @@ module "vpc_creation" {
   source               = "./modules/vpc"
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
+  vpc_name             = "${project-name}-vpc"
 }
 
 # module "ec2_creation" {
@@ -44,18 +45,18 @@ module "vpc_creation" {
 
 module "ecr_creation" {
   source     = "./modules/ecr"
-  ecr_name   = "ecr-jonathan-test1002101223"
+  ecr_name   = "${project-name}-ecr"
   ecr_region = var.region
 }
 
 module "ecs" {
   # count                       = var.ecs_module_creation ? 1 : 0
   source                      = "./modules/ecs"
-  task_definition_family_name = "telegram-bot-service"
-  ecs_image                   = "docker.io/library/ubuntu:latest"
-  ecs_cluster_name            = "tg-bot-cluster"
-  ecs_sevice_name             = "TGBotSVC"
-  ecs_container_name          = "Telegram-money-container"
+  task_definition_family_name = "${project-name}-family"
+  ecs_image                   = var.ecs_image
+  ecs_cluster_name            = "${project-name}-cluster"
+  ecs_sevice_name             = "${project-name}-service"
+  ecs_container_name          = "${project-name}-container"
   ecs_containerport           = 80
   ecs_hostport                = 80
   vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids

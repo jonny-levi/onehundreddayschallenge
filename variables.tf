@@ -4,6 +4,11 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "project-name" {
+  type        = string
+  description = "Project name to apply on all resources"
+  default     = "Jonathan-tf-tg-bot"
+}
 variable "default_tags" {
   type = map(string)
   default = {
@@ -12,7 +17,6 @@ variable "default_tags" {
     Owner       = "Jonathan"
   }
 }
-
 variable "vpc_module_creation" {
   type        = bool
   default     = true
@@ -41,4 +45,10 @@ variable "ecs_module_creation" {
   type        = bool
   default     = false
   description = "True or False for module creation"
+}
+
+variable "ecs_image" {
+  type        = string
+  description = "The ECS image name"
+  default     = "docker.io/library/ubuntu:latest"
 }

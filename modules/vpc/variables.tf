@@ -1,3 +1,8 @@
+variable "vpc_name" {
+  type        = string
+  description = "The VPC name"
+}
+
 variable "aws_vpc_cidr_block" {
   description = "vpc cidr block"
   type        = string
