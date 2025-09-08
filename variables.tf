@@ -7,7 +7,7 @@ variable "region" {
 variable "project-name" {
   type        = string
   description = "Project name to apply on all resources"
-  default     = "Jonathan-tf-tg-bot"
+  default     = "jonathan-tf-tg-bot"
 }
 variable "default_tags" {
   type = map(string)
