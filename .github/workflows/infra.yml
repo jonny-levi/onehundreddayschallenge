@@ -44,3 +44,6 @@ jobs:
 
       - name: Show ECR repo URL
         run: echo "ECR repo created at ${{ steps.tf-output.outputs.ecr_url }}"
+
+      - name: Terraform destroy if any resources are exist
+        run: terraform destroy -auto-approve
