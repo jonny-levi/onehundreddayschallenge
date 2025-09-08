@@ -18,3 +18,10 @@ output "ecr_repository_url" {
 #   value = module.cloudwatch.aws_cloudwatch_dashboard
 # }
 
+# output "null_resource" {
+#   value = module.null.docker_image
+# }
+
+# output "docker_image_name" {
+#   value = module.null.docker_image_name
+# }

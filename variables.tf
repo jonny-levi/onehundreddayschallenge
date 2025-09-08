@@ -52,3 +52,6 @@ variable "ecs_image" {
   description = "The ECS image name"
   default     = "docker.io/library/ubuntu:latest"
 }
+variable "github_url_containing_dockerfile" {
+  default = "https://github.com/jonny-levi/tg-trading-bot.git"
+}
