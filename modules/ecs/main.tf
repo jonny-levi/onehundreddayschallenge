@@ -1,25 +1,24 @@
-resource "aws_iam_role" "test_role" {
-  name = "test_role"
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name = "ecsTaskExecutionRole"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Action = "sts:AssumeRole"
         Effect = "Allow"
-        Sid    = ""
         Principal = {
-          Service = "ecs.amazonaws.com"
+          Service = "ecs-tasks.amazonaws.com"
         }
-      },
+      }
     ]
   })
+}
 
-  tags = {
-    tag-key = "tag-value"
-  }
+# Attach the AWS managed policy that allows ECR pull and CloudWatch logs
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_ecs_cluster" "tg-bot-cluster" {
@@ -49,6 +48,7 @@ resource "aws_ecs_task_definition" "service" {
   network_mode             = "awsvpc"
   cpu                      = 1024
   memory                   = 2048
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
     {
       name      = var.ecs_container_name

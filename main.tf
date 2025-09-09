@@ -49,21 +49,21 @@ module "ecr_creation" {
   ecr_region = var.region
 }
 
-# module "null" {
-#   source                           = "./modules/null"
-#   region                           = var.region
-#   ecr_repo_url                     = module.ecr_creation.ecr_repo_url
-#   image_name                       = "${var.project-name}-telegram"
-#   image_tag                        = "v1.0.0"
-#   github_url_containing_dockerfile = var.github_url_containing_dockerfile
-#   github_repo_folder_name          = "telegram-bot"
-# }
+module "null" {
+  source                           = "./modules/null"
+  region                           = var.region
+  ecr_repo_url                     = module.ecr_creation.ecr_repo_url
+  image_name                       = "${var.project-name}-telegram"
+  image_tag                        = "v1.0.0"
+  github_url_containing_dockerfile = var.github_url_containing_dockerfile
+  github_repo_folder_name          = "telegram-bot"
+}
 
 module "ecs" {
   # count                       = var.ecs_module_creation ? 1 : 0
   source                      = "./modules/ecs"
   task_definition_family_name = "${var.project-name}-family"
-  ecs_image                   = var.ecs_image
+  ecs_image                   = module.null.docker_image_name
   ecs_cluster_name            = "${var.project-name}-cluster"
   ecs_sevice_name             = "${var.project-name}-service"
   ecs_container_name          = "${var.project-name}-container"

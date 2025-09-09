@@ -1,5 +1,5 @@
 resource "null_resource" "docker_build_and_push" {
-  depends_on = [aws_ecr_repository.telegram_bot]
+  depends_on = [var.ecr_repo_url]
 
   provisioner "local-exec" {
     command = <<EOT
@@ -18,7 +18,7 @@ resource "null_resource" "docker_build_and_push" {
       docker tag ${var.image_name}:${var.image_tag} ${var.ecr_repo_url}:${var.image_tag}
 
       # Push to ECR
-      docker push ${var.ecr_repo_url}/${var.image_name}:${var.image_tag}
+      docker push ${var.ecr_repo_url}:${var.image_tag}
     EOT
   }
 }

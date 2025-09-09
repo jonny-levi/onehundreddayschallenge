@@ -22,6 +22,6 @@ output "ecr_repository_url" {
 #   value = module.null.docker_image
 # }
 
-# output "docker_image_name" {
-#   value = module.null.docker_image_name
-# }
+output "docker_image_name" {
+  value = module.null.docker_image_name
+}
