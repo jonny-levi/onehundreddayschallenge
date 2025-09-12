@@ -36,3 +36,13 @@ variable "vpc_public_subnet_cidrs" {
   type        = list(string)
   description = "The VPC public subnets"
 }
+
+variable "ecs_environment" {
+  description = "Map of environment variables to pass to ECS container"
+  type        = map(string)
+  default = {
+    BOT_TOKEN = "dummy_token"
+    API_URL   = "https://api.example.com"
+  }
+}
+

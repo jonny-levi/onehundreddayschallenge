@@ -53,5 +53,5 @@ variable "ecs_image" {
   default     = "docker.io/library/ubuntu:latest"
 }
 variable "github_url_containing_dockerfile" {
-  default = "https://github.com/jonny-levi/tg-trading-bot.git"
+  default = "https://github.com/jonny-levi/smart-bot-translator.git"
 }

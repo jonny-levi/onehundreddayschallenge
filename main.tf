@@ -56,7 +56,7 @@ module "null" {
   image_name                       = "${var.project-name}-telegram"
   image_tag                        = "v1.0.0"
   github_url_containing_dockerfile = var.github_url_containing_dockerfile
-  github_repo_folder_name          = "telegram-bot"
+  github_repo_folder_name          = "${var.project-name}-telegram-bot"
 }
 
 module "ecs" {
@@ -70,4 +70,7 @@ module "ecs" {
   ecs_containerport           = 80
   ecs_hostport                = 80
   vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids
+  ecs_environment = {
+    BOT_TOKEN = "8076237859:AAG6RQsqQ1aQdSQNsJonhVqQb5a5muZqWys"
+  }
 }

@@ -56,7 +56,12 @@ resource "aws_ecs_task_definition" "service" {
       cpu       = 1024
       memory    = 2048
       essential = true
-      command   = ["sleep", "infinity"]
+      environment = [
+        for key, value in var.ecs_environment : {
+          name  = key
+          value = value
+        }
+      ]
       portMappings = [
         {
           containerPort = var.ecs_containerport
