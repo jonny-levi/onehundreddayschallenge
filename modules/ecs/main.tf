@@ -75,7 +75,7 @@ resource "aws_ecs_service" "tg-bot-svc" {
   name            = var.ecs_sevice_name
   cluster         = aws_ecs_cluster.tg-bot-cluster.id
   task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = 3
+  desired_count   = 1
 
   launch_type = "FARGATE"
 

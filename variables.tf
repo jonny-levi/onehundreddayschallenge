@@ -55,3 +55,7 @@ variable "ecs_image" {
 variable "github_url_containing_dockerfile" {
   default = "https://github.com/jonny-levi/smart-bot-translator.git"
 }
+variable "image_tag" {
+  type    = string
+  default = "v1.0.0"
+}
