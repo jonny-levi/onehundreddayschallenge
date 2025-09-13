@@ -15,6 +15,29 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
 }
 
+resource "aws_security_group" "allow_egress_only" {
+  name        = "allow_egress_only"
+  description = "Aallow_egress_only outbound traffic"
+  vpc_id      = var.vpc_id
+
+  tags = {
+    Name = "allow_egress_only"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.allow_egress_only.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
+  security_group_id = aws_security_group.allow_egress_only.id
+  cidr_ipv6         = "::/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+
 # Attach the AWS managed policy that allows ECR pull and CloudWatch logs
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
@@ -75,14 +98,13 @@ resource "aws_ecs_service" "tg-bot-svc" {
   name            = var.ecs_sevice_name
   cluster         = aws_ecs_cluster.tg-bot-cluster.id
   task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = 1
+  desired_count   = var.ecs_container_count
 
   launch_type = "FARGATE"
 
   network_configuration {
     subnets          = var.vpc_public_subnet_cidrs # make sure these are subnet IDs, not CIDRs
     assign_public_ip = true                        # useful if no NAT in VPC
-    # security_groups  = [aws_security_group.ecs.id] # define SG in your module
+    security_groups  = [aws_security_group.allow_egress_only.id]
   }
 }
-

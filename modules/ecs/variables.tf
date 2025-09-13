@@ -46,3 +46,17 @@ variable "ecs_environment" {
   }
 }
 
+variable "ecs_container_count" {
+  type        = number
+  description = "The number of container to deploy at start"
+}
+
+variable "security_group_name" {
+  type        = string
+  description = "The security group name"
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "The VPC id to link security group"
+}

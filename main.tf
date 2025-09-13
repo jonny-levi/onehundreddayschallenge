@@ -67,9 +67,12 @@ module "ecs" {
   ecs_cluster_name            = "${var.project-name}-cluster"
   ecs_sevice_name             = "${var.project-name}-service"
   ecs_container_name          = "${var.project-name}-container"
+  ecs_container_count         = 1
   ecs_containerport           = 80
   ecs_hostport                = 80
   vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids
+  vpc_id                      = module.vpc_creation.vpc_id
+  security_group_name         = "${var.project-name}-sg"
   ecs_environment = {
     BOT_TOKEN = "8076237859:AAG6RQsqQ1aQdSQNsJonhVqQb5a5muZqWys"
   }

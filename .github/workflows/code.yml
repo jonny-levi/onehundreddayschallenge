@@ -1,0 +1,11 @@
+name: Triggered by Repo A
+
+on:
+  repository_dispatch:
+    types: [trigger-from-repoA]
+
+jobs:
+  react:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This was triggered by Repo A!"
