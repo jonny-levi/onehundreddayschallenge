@@ -70,7 +70,7 @@ variable "container_cpu" {
   type        = number
   description = "The container CPU"
   validation {
-    condition     = container_cpu % 1024 == 0
+    condition     = var.container_cpu % 1024 == 0
     error_message = "Conatainer CPU must be in mb format."
   }
 }
@@ -79,7 +79,7 @@ variable "container_memory" {
   type        = number
   description = "the container memory"
   validation {
-    condition     = container_cpu % 1024 == 0
+    condition     = var.container_memory % 1024 == 0
     error_message = "sConatainer Memory must be in mb format."
   }
 }
