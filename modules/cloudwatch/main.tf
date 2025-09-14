@@ -91,6 +91,7 @@ resource "aws_cloudwatch_metric_alarm" "foobar" {
   threshold                 = 80
   alarm_description         = "This metric monitors ec2 cpu utilization"
   insufficient_data_actions = []
+  tags                      = var.default_tags
 }
 
 resource "aws_cloudwatch_log_group" "cwlg" {

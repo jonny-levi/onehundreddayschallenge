@@ -2,6 +2,10 @@ variable "region" {
   type        = string
   description = "The region where all resources will be created"
   default     = "us-east-1"
+  validation {
+    condition     = can(regex("^[a-z]{2}-[a-z]+-[0-9]{1}$", var.region))
+    error_message = "Region must match the AWS format (e.g., us-east-1, eu-west-3)."
+  }
 }
 
 variable "project-name" {

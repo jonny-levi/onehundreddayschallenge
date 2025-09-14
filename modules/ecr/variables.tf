@@ -7,3 +7,8 @@ variable "ecr_region" {
   type        = string
   description = "The ECR region"
 }
+
+variable "default_tags" {
+  type        = map(string)
+  description = "Default Tags assign to resouces"
+}

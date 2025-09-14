@@ -27,3 +27,8 @@ variable "ec2_count" {
   type        = number
   description = "The number of EC2 instances"
 }
+
+variable "default_tags" {
+  type        = map(string)
+  description = "Default Tags assign to resouces"
+}

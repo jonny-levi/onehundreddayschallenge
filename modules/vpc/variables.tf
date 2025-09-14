@@ -17,3 +17,8 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   description = "CIDR blocks for private subnets"
 }
+
+variable "default_tags" {
+  type        = map(string)
+  description = "Default Tags assign to resouces"
+}

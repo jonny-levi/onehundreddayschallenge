@@ -60,3 +60,26 @@ variable "vpc_id" {
   type        = string
   description = "The VPC id to link security group"
 }
+
+variable "default_tags" {
+  type        = map(string)
+  description = "Default Tags assign to resouces"
+}
+
+variable "container_cpu" {
+  type        = number
+  description = "The container CPU"
+  validation {
+    condition     = container_cpu % 1024 == 0
+    error_message = "Conatainer CPU must be in mb format."
+  }
+}
+
+variable "container_memory" {
+  type        = number
+  description = "the container memory"
+  validation {
+    condition     = container_cpu % 1024 == 0
+    error_message = "sConatainer Memory must be in mb format."
+  }
+}

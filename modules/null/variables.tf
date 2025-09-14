@@ -27,3 +27,8 @@ variable "github_repo_folder_name" {
   type        = string
   description = "The folder name of the cloned github"
 }
+
+variable "default_tags" {
+  type        = map(string)
+  description = "Default Tags assign to resouces"
+}

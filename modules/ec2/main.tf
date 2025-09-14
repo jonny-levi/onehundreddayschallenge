@@ -9,6 +9,7 @@ data "aws_ami" "example" {
     name   = "name"
     values = ["al2023-ami-2023*"]
   }
+  tags = var.default_tags
 }
 
 resource "aws_instance" "example" {
@@ -23,7 +24,5 @@ resource "aws_instance" "example" {
     }
   }
   instance_type = "t4g.nano"
-  tags = {
-    Name = "test-spot-${count.index + 1}"
-  }
+  tags          = var.default_tags
 }

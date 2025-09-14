@@ -4,6 +4,7 @@ module "vpc_creation" {
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
   vpc_name             = "${var.project-name}-vpc"
+  default_tags         = var.default_tags
 }
 
 # module "ec2_creation" {
@@ -44,9 +45,10 @@ module "vpc_creation" {
 # }
 
 module "ecr_creation" {
-  source     = "./modules/ecr"
-  ecr_name   = "${var.project-name}-ecr"
-  ecr_region = var.region
+  source       = "./modules/ecr"
+  ecr_name     = "${var.project-name}-ecr"
+  ecr_region   = var.region
+  default_tags = var.default_tags
 }
 
 module "null" {
@@ -57,6 +59,7 @@ module "null" {
   image_tag                        = var.image_tag
   github_url_containing_dockerfile = var.github_url_containing_dockerfile
   github_repo_folder_name          = "${var.project-name}-telegram-bot"
+  default_tags                     = var.default_tags
 }
 
 module "ecs" {
@@ -73,6 +76,9 @@ module "ecs" {
   vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids
   vpc_id                      = module.vpc_creation.vpc_id
   security_group_name         = "${var.project-name}-sg"
+  default_tags                = var.default_tags
+  container_cpu               = 1024
+  container_memory            = 2048
   ecs_environment = {
     BOT_TOKEN = "8076237859:AAG6RQsqQ1aQdSQNsJonhVqQb5a5muZqWys"
   }
