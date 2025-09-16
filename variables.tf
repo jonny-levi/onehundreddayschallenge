@@ -63,3 +63,7 @@ variable "image_tag" {
   type    = string
   default = "v1.0.0"
 }
+
+variable "s3_bucket_name" {
+  type = string
+}

@@ -1,8 +1,5 @@
 resource "aws_s3_bucket" "example" {
-  bucket = "my-tf-test-bucket-jonathan-levi10010101"
+  bucket = var.aws_s3_bucket_name
   region = var.region
-  tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
-  }
+  tags   = var.default_tags
 }

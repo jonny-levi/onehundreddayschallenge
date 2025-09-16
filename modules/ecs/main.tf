@@ -73,15 +73,15 @@ resource "aws_ecs_task_definition" "service" {
   family                   = var.task_definition_family_name
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = var.container_cpu
+  memory                   = var.container_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
     {
       name      = var.ecs_container_name
       image     = var.ecs_image
-      cpu       = 1024
-      memory    = 2048
+      cpu       = var.container_cpu
+      memory    = var.container_memory
       essential = true
       environment = [
         for key, value in var.ecs_environment : {
@@ -97,6 +97,7 @@ resource "aws_ecs_task_definition" "service" {
       ]
     }
   ])
+  tags = var.default_tags
 }
 resource "aws_ecs_service" "tg-bot-svc" {
   name            = var.ecs_sevice_name
@@ -111,4 +112,5 @@ resource "aws_ecs_service" "tg-bot-svc" {
     assign_public_ip = true                        # useful if no NAT in VPC
     security_groups  = [aws_security_group.allow_egress_only.id]
   }
+  tags = var.default_tags
 }

@@ -26,8 +26,10 @@ module "vpc_creation" {
 
 # module "s3" {
 #   # count  = var.s3_module_creation ? 1 : 0
-#   source = "./modules/s3"
-#   region = var.region
+#   source             = "./modules/s3"
+#   region             = var.region
+#   aws_s3_bucket_name = var.s3_bucket_name
+#   default_tags       = var.default_tags
 # }
 
 # module "cloudwatch" {

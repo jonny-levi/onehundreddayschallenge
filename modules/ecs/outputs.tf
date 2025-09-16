@@ -5,3 +5,7 @@ output "aws_ecs_cluster" {
 output "aws_ecs_task_definition" {
   value = aws_ecs_task_definition.service.family
 }
+
+output "aws_ecs_service_bot_ip" {
+  value = aws_ecs_service.tg-bot-svc
+}
