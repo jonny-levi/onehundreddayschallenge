@@ -14,8 +14,12 @@ variable "public_subnet_cidrs" {
 }
 
 variable "private_subnet_cidrs" {
-  type        = list(string)
-  description = "CIDR blocks for private subnets"
+  type = list(string)
+
+  validation {
+    condition     = length(var.private_subnet_cidrs) <= length(data.aws_availability_zones.available.names)
+    error_message = "You cannot specify more private subnets than available AZs in this region."
+  }
 }
 
 variable "default_tags" {
