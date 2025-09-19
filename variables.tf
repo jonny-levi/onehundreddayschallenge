@@ -65,5 +65,6 @@ variable "image_tag" {
 }
 
 variable "s3_bucket_name" {
-  type = string
+  type    = string
+  default = "test-bucket-jonathanl-tf"
 }

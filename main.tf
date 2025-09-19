@@ -1,10 +1,18 @@
 module "vpc_creation" {
   # count                = var.vpc_module_creation ? 1 : 0
-  source               = "./modules/vpc"
-  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
-  vpc_name             = "${var.project-name}-vpc"
-  default_tags         = var.default_tags
+  source = "./modules/vpc"
+  private_cidrs_to_az = [
+    { cidr = "10.0.101.0/24", az = "us-east-1a" },
+    { cidr = "10.0.102.0/24", az = "us-east-1b" }
+  ]
+  public_cidrs_to_az = [
+    { cidr = "10.0.103.0/24", az = "us-east-1a" },
+    { cidr = "10.0.104.0/24", az = "us-east-1b" }
+  ]
+  # public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+  # private_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
+  vpc_name     = "${var.project-name}-vpc"
+  default_tags = var.default_tags
 }
 
 # module "ec2_creation" {
