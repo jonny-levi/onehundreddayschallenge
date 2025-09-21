@@ -9,9 +9,9 @@ output "ecr_repository_url" {
   value = module.ecr_creation.ecr_repo_url
 }
 
-output "ecs_sevice_name" {
-  value = module.ecs.aws_ecs_service_bot_ip
-}
+# output "ecs_sevice_name" {
+#   value = module.ecs.aws_ecs_service_bot_ip
+# }
 
 # output "ec2_instance_id" {
 #   value = module.ec2_creation.ec2_instance_id[*]
@@ -31,4 +31,11 @@ output "ecs_sevice_name" {
 
 output "docker_image_name" {
   value = module.null.docker_image_name
+}
+output "vpc_public_cidrs_to_az" {
+  value = module.vpc_creation.public_subnet_ids
+}
+
+output "vpc_private_cidrs_to_az" {
+  value = module.vpc_creation.private_subnet_ids
 }

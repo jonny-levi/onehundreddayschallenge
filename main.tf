@@ -72,24 +72,36 @@ module "null" {
   default_tags                     = var.default_tags
 }
 
-module "ecs" {
-  # count                       = var.ecs_module_creation ? 1 : 0
-  source                      = "./modules/ecs"
-  task_definition_family_name = "${var.project-name}-family"
-  ecs_image                   = "${module.ecr_creation.ecr_repo_url}:${var.image_tag}"
-  ecs_cluster_name            = "${var.project-name}-cluster"
-  ecs_sevice_name             = "${var.project-name}-service"
-  ecs_container_name          = "${var.project-name}-container"
-  ecs_container_count         = 1
-  ecs_containerport           = 80
-  ecs_hostport                = 80
-  vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids
-  vpc_id                      = module.vpc_creation.vpc_id
-  security_group_name         = "${var.project-name}-sg"
-  default_tags                = var.default_tags
-  container_cpu               = 1024
-  container_memory            = 2048
-  ecs_environment = {
-    BOT_TOKEN = "8076237859:AAG6RQsqQ1aQdSQNsJonhVqQb5a5muZqWys"
-  }
-}
+# module "ecs" {
+#   # count                       = var.ecs_module_creation ? 1 : 0
+#   source                      = "./modules/ecs"
+#   task_definition_family_name = "${var.project-name}-family"
+#   ecs_image                   = "${module.ecr_creation.ecr_repo_url}:${var.image_tag}"
+#   ecs_cluster_name            = "${var.project-name}-cluster"
+#   ecs_sevice_name             = "${var.project-name}-service"
+#   ecs_container_name          = "${var.project-name}-container"
+#   ecs_container_count         = 1
+#   ecs_containerport           = 80
+#   ecs_hostport                = 80
+#   vpc_public_subnet_cidrs     = module.vpc_creation.public_subnet_ids
+#   vpc_id                      = module.vpc_creation.vpc_id
+#   security_group_name         = "${var.project-name}-sg"
+#   default_tags                = var.default_tags
+#   container_cpu               = 1024
+#   container_memory            = 2048
+#   ecs_environment = {
+#     BOT_TOKEN = "8076237859:AAG6RQsqQ1aQdSQNsJonhVqQb5a5muZqWys"
+#   }
+# }
+
+# module "eks" {
+#   source                             = "./modules/eks"
+#   eks_cluster_name                   = "${var.project-name}-cluster"
+#   eks_cluster_version                = "1.31" #1.32 #1.33
+#   eks_private_subnets                = module.vpc_creation.private_subnet_ids
+#   max_number_of_ec2eks_instances     = 2
+#   min_number_of_ec2eks_instances     = 1
+#   desired_number_of_ec2eks_instances = 2
+#   node_group_name                    = "${var.project-name}-node-group"
+#   default_tags                       = var.default_tags
+# }
