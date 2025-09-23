@@ -39,3 +39,11 @@ output "vpc_public_cidrs_to_az" {
 output "vpc_private_cidrs_to_az" {
   value = module.vpc_creation.private_subnet_ids
 }
+output "eks_cluster_ca" {
+  value = module.eks.eks_cluster_ca
+}
+
+output "eks_config" {
+  value     = module.eks.kubeconfig
+  sensitive = true
+}

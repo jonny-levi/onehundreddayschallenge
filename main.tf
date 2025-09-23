@@ -94,14 +94,17 @@ module "null" {
 #   }
 # }
 
-# module "eks" {
-#   source                             = "./modules/eks"
-#   eks_cluster_name                   = "${var.project-name}-cluster"
-#   eks_cluster_version                = "1.31" #1.32 #1.33
-#   eks_private_subnets                = module.vpc_creation.private_subnet_ids
-#   max_number_of_ec2eks_instances     = 2
-#   min_number_of_ec2eks_instances     = 1
-#   desired_number_of_ec2eks_instances = 2
-#   node_group_name                    = "${var.project-name}-node-group"
-#   default_tags                       = var.default_tags
-# }
+module "eks" {
+  source                             = "./modules/eks"
+  eks_cluster_name                   = "${var.project-name}-cluster"
+  eks_cluster_version                = "1.31" #1.32 #1.33
+  eks_private_subnets                = module.vpc_creation.private_subnet_ids
+  max_number_of_ec2eks_instances     = 2
+  min_number_of_ec2eks_instances     = 1
+  desired_number_of_ec2eks_instances = 2
+  node_group_name                    = "${var.project-name}-node-group"
+  vpc_id                             = module.vpc_creation.vpc_id
+  default_tags                       = var.default_tags
+}
+
+

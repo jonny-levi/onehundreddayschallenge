@@ -36,3 +36,7 @@ variable "default_tags" {
   type        = map(string)
   description = "Default Tags assign to resouces"
 }
+
+variable "vpc_id" {
+  type = string
+}

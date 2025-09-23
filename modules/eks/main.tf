@@ -30,7 +30,6 @@ resource "aws_iam_role" "eks_node_role" {
         Principal = {
           Service = [
             "ec2.amazonaws.com",
-            "eks.amazonaws.com"
           ]
         }
       }
@@ -53,6 +52,14 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryRea
   role       = aws_iam_role.eks_node_role.name
 }
 
+
+resource "aws_iam_role_policy_attachment" "example-AmazonEBSCSIDriverPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.eks_node_role.name
+}
+
+
+
 resource "aws_eks_cluster" "example" {
   name = var.eks_cluster_name
 
@@ -71,13 +78,22 @@ resource "aws_eks_cluster" "example" {
   # after EKS Cluster handling. Otherwise, EKS will not be able to
   # properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
-    aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy, aws_iam_role_policy_attachment.example-AmazonEKSVPCResourceController
   ]
   tags = var.default_tags
 }
 
+data "aws_eks_cluster_auth" "example" {
+  name = aws_eks_cluster.example.name
+}
+
 resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "example-AmazonEKSVPCResourceController" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   role       = aws_iam_role.cluster.name
 }
 
@@ -111,11 +127,15 @@ resource "aws_eks_node_group" "example" {
   node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = var.eks_private_subnets
-
+  instance_types  = ["t2.small"]
+  disk_size       = 20
+  ami_type        = "AL2_x86_64" # AL2_x86_64, AL2_x86_64_GPU, AL2_ARM_64, CUSTOM
+  capacity_type   = "ON_DEMAND"
   scaling_config {
     desired_size = var.desired_number_of_ec2eks_instances
     max_size     = var.max_number_of_ec2eks_instances
     min_size     = var.min_number_of_ec2eks_instances
+
   }
 
   update_config {
@@ -132,3 +152,73 @@ resource "aws_eks_node_group" "example" {
   tags = var.default_tags
 }
 
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name = aws_eks_cluster.example.name
+  addon_name   = "aws-ebs-csi-driver"
+}
+
+
+provider "kubernetes" {
+  host                   = aws_eks_cluster.example.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.example.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.example.token
+}
+
+resource "kubernetes_storage_class" "gp3" {
+  metadata {
+    name = "gp3"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+
+  storage_provisioner = "kubernetes.io/aws-ebs"
+
+  parameters = {
+    type      = "gp3"
+    fsType    = "ext4"
+    encrypted = "true"
+  }
+
+  allow_volume_expansion = true
+  volume_binding_mode    = "WaitForFirstConsumer"
+}
+
+# EKS Node Security Group
+# resource "aws_security_group" "eks_nodes" {
+#   name        = "node-sg"
+#   description = "Security group for all nodes in the cluster"
+#   vpc_id      = var.vpc_id
+
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+
+#   tags = {
+#     Name                             = "node-sg"
+#     "kubernetes.io/cluster/-cluster" = "owned"
+#   }
+# }
+
+# resource "aws_security_group_rule" "nodes_internal" {
+#   description              = "Allow nodes to communicate with each other"
+#   from_port                = 0
+#   protocol                 = "-1"
+#   security_group_id        = aws_security_group.eks_nodes.id
+#   source_security_group_id = aws_security_group.eks_nodes.id
+#   to_port                  = 65535
+#   type                     = "ingress"
+# }
+
+# resource "aws_security_group_rule" "nodes_cluster_inbound" {
+#   description              = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
+#   from_port                = 1025
+#   protocol                 = "tcp"
+#   security_group_id        = aws_security_group.eks_nodes.id
+#   source_security_group_id = aws_security_group.eks_cluster.id
+#   to_port                  = 65535
+#   type                     = "ingress"
+# }

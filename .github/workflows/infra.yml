@@ -26,24 +26,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Terraform Init
-        run: terraform init
+      # - name: Terraform Init
+      #   run: terraform init
 
-      - name: Terraform destroy if any resources are exist
-        run: terraform destroy -auto-approve
+      # - name: Terraform destroy if any resources are exist
+      #   run: terraform destroy -auto-approve
 
-      - name: Terraform plan
-        run: terraform plan
+      # - name: Terraform plan
+      #   run: terraform plan
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      # - name: Terraform Apply
+      #   run: terraform apply -auto-approve
 
-      - name: Get ECR repo URL
-        id: tf-output
-        run: echo "ecr_url=$(terraform output -raw ecr_repository_url)" >> $GITHUB_OUTPUT
+      # - name: Get ECR repo URL
+      #   id: tf-output
+      #   run: echo "ecr_url=$(terraform output -raw ecr_repository_url)" >> $GITHUB_OUTPUT
 
-      - name: Show ECR repo URL
-        run: echo "ECR repo created at ${{ steps.tf-output.outputs.ecr_url }}"
+      # - name: Show ECR repo URL
+      #   run: echo "ECR repo created at ${{ steps.tf-output.outputs.ecr_url }}"
 
-      - name: Terraform destroy if any resources are exist
-        run: terraform destroy -auto-approve
+      # - name: Terraform destroy if any resources are exist
+      #   run: terraform destroy -auto-approve
