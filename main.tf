@@ -102,6 +102,9 @@ module "eks" {
   max_number_of_ec2eks_instances     = 2
   min_number_of_ec2eks_instances     = 1
   desired_number_of_ec2eks_instances = 2
+  instance_disk_size                 = 20
+  instance_types                     = ["t2.small"]
+  instances_ami_type                 = "AL2_x86_64"
   node_group_name                    = "${var.project-name}-node-group"
   vpc_id                             = module.vpc_creation.vpc_id
   default_tags                       = var.default_tags

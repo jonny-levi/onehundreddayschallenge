@@ -127,9 +127,9 @@ resource "aws_eks_node_group" "example" {
   node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = var.eks_private_subnets
-  instance_types  = ["t2.small"]
-  disk_size       = 20
-  ami_type        = "AL2_x86_64" # AL2_x86_64, AL2_x86_64_GPU, AL2_ARM_64, CUSTOM
+  instance_types  = var.instance_types
+  disk_size       = var.instance_disk_size
+  ami_type        = var.instances_ami_type # AL2_x86_64, AL2_x86_64_GPU, AL2_ARM_64, CUSTOM
   capacity_type   = "ON_DEMAND"
   scaling_config {
     desired_size = var.desired_number_of_ec2eks_instances
@@ -149,7 +149,7 @@ resource "aws_eks_node_group" "example" {
     aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
-  tags = var.default_tags
+  tags = merge(var.default_tags, { Name = "eks-node" })
 }
 
 resource "aws_eks_addon" "ebs_csi" {
@@ -164,25 +164,25 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.example.token
 }
 
-resource "kubernetes_storage_class" "gp3" {
-  metadata {
-    name = "gp3"
-    annotations = {
-      "storageclass.kubernetes.io/is-default-class" = "true"
-    }
-  }
+# resource "kubernetes_storage_class" "gp3" {
+#   metadata {
+#     name = "gp3"
+#     annotations = {
+#       "storageclass.kubernetes.io/is-default-class" = "true"
+#     }
+#   }
 
-  storage_provisioner = "kubernetes.io/aws-ebs"
+#   storage_provisioner = "kubernetes.io/aws-ebs"
 
-  parameters = {
-    type      = "gp3"
-    fsType    = "ext4"
-    encrypted = "true"
-  }
+#   parameters = {
+#     type      = "gp3"
+#     fsType    = "ext4"
+#     encrypted = "true"
+#   }
 
-  allow_volume_expansion = true
-  volume_binding_mode    = "WaitForFirstConsumer"
-}
+#   allow_volume_expansion = true
+#   volume_binding_mode    = "WaitForFirstConsumer"
+# }
 
 # EKS Node Security Group
 # resource "aws_security_group" "eks_nodes" {

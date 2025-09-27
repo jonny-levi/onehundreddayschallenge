@@ -24,6 +24,6 @@ users:
     token: ${data.aws_eks_cluster_auth.example.token}
 EOT
 }
-# output "name" {
-
+# output "eks_instances_ids" {
+#   value = aws_eks_node_group.example.
 # }

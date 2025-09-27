@@ -40,3 +40,18 @@ variable "default_tags" {
 variable "vpc_id" {
   type = string
 }
+
+variable "instance_types" {
+  type        = list(string)
+  description = "The instance type for the eks cluster"
+}
+
+variable "instance_disk_size" {
+  type        = number
+  description = "The disk size of the instances"
+}
+
+variable "instances_ami_type" {
+  type        = string
+  description = "The ami type"
+}
