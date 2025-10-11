@@ -61,16 +61,16 @@ module "ecr_creation" {
   default_tags = var.default_tags
 }
 
-module "null" {
-  source                           = "./modules/null"
-  region                           = var.region
-  ecr_repo_url                     = module.ecr_creation.ecr_repo_url
-  image_name                       = "${var.project-name}-telegram"
-  image_tag                        = var.image_tag
-  github_url_containing_dockerfile = var.github_url_containing_dockerfile
-  github_repo_folder_name          = "${var.project-name}-telegram-bot"
-  default_tags                     = var.default_tags
-}
+# module "null" {
+#   source                           = "./modules/null"
+#   region                           = var.region
+#   ecr_repo_url                     = module.ecr_creation.ecr_repo_url
+#   image_name                       = "${var.project-name}-telegram"
+#   image_tag                        = var.image_tag
+#   github_url_containing_dockerfile = var.github_url_containing_dockerfile
+#   github_repo_folder_name          = "${var.project-name}-telegram-bot"
+#   default_tags                     = var.default_tags
+# }
 
 # module "ecs" {
 #   # count                       = var.ecs_module_creation ? 1 : 0
@@ -97,7 +97,7 @@ module "null" {
 module "eks" {
   source                             = "./modules/eks"
   eks_cluster_name                   = "${var.project-name}-cluster"
-  eks_cluster_version                = "1.31" #1.32 #1.33
+  eks_cluster_version                = "1.32" #1.33
   eks_private_subnets                = module.vpc_creation.private_subnet_ids
   max_number_of_ec2eks_instances     = 2
   min_number_of_ec2eks_instances     = 1
