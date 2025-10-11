@@ -11,12 +11,12 @@ variable "region" {
 variable "project-name" {
   type        = string
   description = "Project name to apply on all resources"
-  default     = "jonathan-tf-tg-bot"
+  default     = "roi-freelancer"
 }
 variable "default_tags" {
   type = map(string)
   default = {
-    Project     = "TelegramBot"
+    Project     = "roi-freelancer"
     Environment = "dev"
     Owner       = "Jonathan"
   }
